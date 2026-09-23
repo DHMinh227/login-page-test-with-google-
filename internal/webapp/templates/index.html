@@ -1,0 +1,86 @@
+{{define "index.html"}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garden Guardians — Sign in</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="world-panel" aria-labelledby="game-title">
+      <div class="brand-mark" aria-hidden="true">GG</div>
+      <p class="eyebrow">Garden Guardians</p>
+      <h1 id="game-title">Defend the garden.<br>Keep your progress.</h1>
+      <p class="intro">Sign in once to connect your commander profile, saved levels, and future achievements across devices.</p>
+      <div class="lane-preview" aria-hidden="true">
+        <span class="sun">✦</span>
+        <span class="sprout sprout-one">♣</span>
+        <span class="sprout sprout-two">♣</span>
+        <span class="path-line"></span>
+      </div>
+      <p class="original-note">An original lane-defense login template. No commercial game assets are used.</p>
+    </section>
+
+    <section class="login-panel" aria-label="Account sign in">
+      <div class="login-card">
+        {{if .Notice}}<div class="alert success" role="status">{{.Notice}}</div>{{end}}
+        {{if .Error}}<div class="alert error" role="alert">{{.Error}}</div>{{end}}
+
+        {{if .User}}
+          <p class="eyebrow">Commander profile</p>
+          <h2>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}Guardian{{end}}</h2>
+          <div class="profile-row">
+            {{if .User.Picture}}
+              <img class="avatar" src="{{.User.Picture}}" alt="" referrerpolicy="no-referrer">
+            {{else}}
+              <div class="avatar placeholder" aria-hidden="true">G</div>
+            {{end}}
+            <div>
+              <strong>{{.User.Email}}</strong>
+              <span>Google identity verified</span>
+            </div>
+          </div>
+          <div class="ready-box">
+            <span class="ready-dot" aria-hidden="true"></span>
+            Local game session ready
+          </div>
+          <p class="helper">Your future game client can request the same profile data from <code>GET /api/me</code>.</p>
+          <form method="post" action="/logout">
+            <button class="secondary-button" type="submit">Sign out</button>
+          </form>
+        {{else}}
+          <p class="eyebrow">Player account</p>
+          <h2>Continue to your garden</h2>
+          <p class="helper">Use a real Google account. This app requests only your basic profile and verified email address.</p>
+
+          {{if .Configured}}
+            <a class="google-button" href="/auth/google/start">
+              <span class="google-g" aria-hidden="true">G</span>
+              Continue with Google
+            </a>
+          {{else}}
+            <button class="google-button disabled" type="button" disabled>
+              <span class="google-g" aria-hidden="true">G</span>
+              Continue with Google
+            </button>
+            <div class="setup-box">
+              <strong>One-time setup needed</strong>
+              <span>Add your Google Client ID and Client Secret to <code>.env</code>, then restart the server.</span>
+            </div>
+          {{end}}
+
+          <div class="trust-list" aria-label="Login protections">
+            <span>OpenID Connect</span>
+            <span>PKCE</span>
+            <span>HttpOnly session</span>
+          </div>
+          <p class="terms">By continuing, you create a local prototype account session. The template does not read Gmail messages or request Gmail API access.</p>
+        {{end}}
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+{{end}}
